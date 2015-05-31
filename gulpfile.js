@@ -4,6 +4,9 @@ var gulp 		= require('gulp'),
 	uglify 		= require('gulp-uglify'),
 	streamify 	= require('gulp-streamify'),
 	sass 		= require('gulp-sass'),
+	minifycss 	= require('gulp-minify-css'),
+	rename 		= require('gulp-rename'),
+
 	connect 	= require('gulp-connect');
 
 gulp.task('html', function () {
@@ -24,8 +27,10 @@ gulp.task('sass', function() {
 	return gulp.src('app/assets/sass/styles.scss')
 		.pipe(sass({ sourceComments: 'map'}))
 		.pipe(gulp.dest('app/assets/css'))
+		.pipe(rename({suffix: '.min'}))
+	    .pipe(minifycss())
+	    .pipe(gulp.dest('app/assets/css'))
 		.pipe(connect.reload());
-
 });
 
 // TASKS
