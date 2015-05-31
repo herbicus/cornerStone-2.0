@@ -1,0 +1,271 @@
+// -------------------------------------
+//   Base
+// -------------------------------------
+// ----- Global defaults for Base-level tags (body, p, etc.)
+// -------------------------------------
+
+// ----- Uncomment if project will be using rems ----- //
+// html {
+//   font-size: 62.5%;
+// }
+
+p {
+	color: $charcoal;
+}
+
+a {
+	color: $muteBlue;
+	text-decoration: none;
+	@include transition (all 0.3s ease-in-out);
+	@include underline-hover($muteGreen);
+	
+	&:hover {
+		color: $navy;
+	}
+
+	&:active, &:focus {
+		color: $navy;
+		outline: none;
+	}
+}
+
+//------
+
+hr {
+  border-bottom: 1px solid $base-border-color;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  margin: $base-line-height 0;
+}
+
+img {
+  margin: 0;
+  max-width: 100%;
+}
+
+blockquote {
+	border-left: 2px solid $base-border-color;
+	color: lighten($base-font-color, 15);
+	margin: $base-line-height 0;
+	padding-left: $base-line-height / 2;
+}
+
+cite {
+	color: lighten($base-font-color, 25);
+	font-style: italic;
+
+	&:before {
+		content: '\2015 \00A0';
+	}
+}
+
+// -------------------------------------
+//   Tables
+// -------------------------------------
+
+table {
+	border-collapse: collapse;
+	margin: ($base-line-height / 2) 0;
+	table-layout: fixed;
+	width: 100%;
+}
+
+th {
+	border-bottom: 1px solid darken($base-border-color, 15%);
+	font-weight: bold;
+	padding: ($base-line-height / 2) 0;
+	text-align: left;
+}
+
+td {
+	border-bottom: 1px solid $base-border-color;
+	padding: ($base-line-height / 2) 0;
+}
+
+tr, td, th {
+  	vertical-align: middle;
+}
+
+// -------------------------------------
+//   Forms
+// -------------------------------------
+
+fieldset {
+	//background: lighten($base-border-color, 10);
+	background: $cream;
+	border: 1px solid $base-border-color;
+	margin: 0 0 ($base-line-height / 2) 0;
+	padding: $base-line-height;
+}
+
+input,
+label,
+select {
+	  display: block;
+	  font-family: $form-font-family;
+	  font-size: $form-font-size;
+	  font-weight: bold; 
+}
+
+label {
+		font-weight: bold;
+		margin-bottom: $base-line-height / 4;
+
+	&.required:after {
+		content: "*";
+	}
+
+	abbr {
+		display: none;
+	}
+}
+
+textarea,
+#{$all-text-inputs},
+select[multiple=multiple] {
+	@include box-sizing(border-box);
+	@include transition(border-color);
+	background-color: white;
+	border-radius: $form-border-radius;
+	border: 1px solid $form-border-color;
+	box-shadow: $form-box-shadow;
+	font-family: $form-font-family;
+	font-size: $form-font-size;
+	margin-bottom: $base-line-height / 2;
+	padding: ($base-line-height / 3) ($base-line-height / 3);
+	width: 100%;
+
+	&:hover {
+		border-color: $form-border-color-hover;
+	}
+
+	&:focus {
+		border-color: $form-border-color-focus;
+		box-shadow: $form-box-shadow-focus;
+		outline: none;
+	}
+}
+
+textarea {
+  	resize: vertical;
+}
+
+input[type="search"] {
+  	@include appearance(none);
+}
+
+input[type="checkbox"], input[type="radio"] {
+	display: inline;
+	margin-right: $base-line-height / 4;
+}
+
+input[type="file"] {
+	margin-bottom: $base-line-height / 2;
+	padding-bottom: $base-line-height / 3;
+	width: 100%;
+}
+
+select {
+	margin-bottom: $base-line-height;
+	max-width: 100%;
+	width: auto;
+}
+
+// -------------------------------------
+//   Button
+// -------------------------------------
+
+button,
+input[type="submit"] {
+	-webkit-font-smoothing: antialiased;
+	background-color: $muteBlue;
+	//border-radius: $base-border-radius;
+	-webkit-border-radius: 5px; 
+	border-radius: 5px;
+	font-family: gothamBold;
+	text-transform: uppercase; 
+	color: $white;
+	display: inline-block;
+	font-size: $base-font-size;
+	font-weight: bold;
+	line-height: 1;
+	padding: .75em 1em;
+	text-decoration: none;
+	@include transition (all 0.3s ease-in-out);
+	@include appearance(none);
+	border: none;
+	cursor: pointer;
+	user-select: none;
+	vertical-align: middle;
+	white-space: nowrap;
+	
+	&:hover {
+		background-color: $navy;
+		color: $muteBlue;
+	}
+
+}
+
+
+//ANIMATED HAMBURGER ICON TOGGLE BUTTON
+
+// .mobile-nav-btn {
+// 	position: absolute;
+// 	z-index: 9999; 
+// 	width: 60px;
+// 	height: 120px;
+// 	left: 90%;
+// 	top: -40%;
+// 	@include transition-duration(0.5s);
+
+// 	.icon {
+// 		@include transition-duration(0.5s);
+// 		position: absolute;
+// 		height: 4px;
+// 		width: 30px;
+// 		top: 60px;
+// 		background-color: #fff;
+
+// 		&:before {
+// 			@include transition-duration(0.5s);
+// 			position: absolute;
+// 			height: 4px;
+// 			width: 30px;
+// 			background-color: #fff;
+// 			content: "";
+// 			top: -10px;
+// 		}
+
+// 		&:after {
+// 			@include transition-duration(0.5s);
+// 			position: absolute;
+// 			height: 4px;
+// 			width: 30px;
+// 			background-color: #fff;
+// 			content: "";
+// 			top: 10px;
+// 		}
+
+// 		&:hover{
+// 		  cursor: pointer;
+// 		}
+// 	}
+
+// 	&.open {
+// 		.icon {
+// 			@include transition-duration(0.5s);
+// 			background: transparent;
+			
+// 			&:before {
+// 			  @include transform( rotateZ(45deg) scaleX(1.25) translate(6.5px, 6.5px) );
+// 			}
+
+// 			&:after {
+// 			  @include transform( rotateZ(-45deg) scaleX(1.25) translate(6px, -6px) );
+// 			}
+// 		}				
+// 	}	
+// } 
+
+// END ANIMATED HAMBURGER TOGGLE BUTTON
