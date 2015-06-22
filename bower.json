@@ -1,0 +1,29 @@
+{
+  "name": "cornerStone bower components",
+  "version": "0.0.0",
+  "homepage": "https://github.com/stevis/gulp-browserify-angular",
+  "authors": [
+    "Steve Hamilton <shamilt01@gmail.com>" // Main Man
+    // twisted and tangled by Herb Torres <herbtorres960@gmail.com>
+  ],
+  "description": "starter app",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.0"
+  },
+  "devDependencies": {
+    "angular-route": "~1.3.0",
+    "jquery": "~2.1.1",
+    "angular-animate": "~1.3.0",
+    "greensock": "~1.14.2",
+    "angular-adaptive-detection": "~0.4.1"
+  }
+}
