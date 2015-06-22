@@ -1,5 +1,5 @@
 // -------------------------------------
-//   styles.scss
+//   app.scss
 // -------------------------------------
 // ----- Contains an import section for libs, core, and modules, the inbox,
 // ----- and a shame section for quick fixes and hacks ----- //
@@ -45,15 +45,8 @@
 // to quickly add styles that are easily seen by the maintainer of the file.
 // -------------------------------------
 
-.object {
-	width: 100px;
-	height: 100px;
-	//border: 1px solid black;
-	background: blue;
-	@include shadow-border(red);
-	opacity: 0;
-	@include centerer;
-	left: 20%;
+body {
+	background: $cream;
 }
 
 // -------------------------------------
