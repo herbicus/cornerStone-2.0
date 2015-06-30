@@ -1,104 +1,154 @@
-'use strict'
+'use strict';
 
-var MobileCheck = require('./MobileCheck');
-var SizeController = require('./SizeController');
+var $ = require('jquery');
+var config = require('../config');
+var AnimationController = require('./AnimationController');
+var VideoController = require('./VideoController');
 
-// -----------------------------------------------	
-// SCROLL CONTROLLER
-// -----------------------------------------------	
-// call in document.ready - ScrollController.init(); -
-// - reference as such on app.js -
-// var scrollController = require('./modules/ScrollController').ScrollController;
-// var ScrollController = new scrollController();
-// create new instance of ScrollController
+module.exports = function() {
 
-var ScrollController = function () {
+  this.init = function() {
 
-	this.init = function() {
+    //prepare the modules
+    this.animate = new AnimationController();
+    this.video = new VideoController();
 
-		//dom elements
-		//  section containers - use #sections-container
-		this.sectionsContainer = $('body').find('#sections-container');
-		// #home ( for above the fold/top hero) and general content use .content class name
-		this.home = $('body').find('#home');
-		// can change use for anyother section for dynamic content
-		this.services = $('body').find('#someIdName');
+    //probably move this to the bootstrap tomorrow.
+    this.video.init();
 
-		this.id = null;
+    //gather the sections
+    this.sections = $('section, #intel-footer');
 
-		// check for mobile
-		this.isMobile = MobileCheck.isMobile();
+    //add the listener
+    this.listen();
 
-		this.scrollPos = 0;
+    //for determing scroll direction
+    this.lastScrollPos = 0;
+    this.scrollDirection = null;
 
-		if(!this.isMobile){
-			this.loop();
-		}
+  };
 
-	};
+  this.handler = function(e) {
 
-	this.move = function(){
-		this.scrollPos = window.pageYOffset;
-	};
+    var scrollTop = $(window).scrollTop();
 
-	var scroll = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function(callback){ window.setTimeout(callback, 1000/60) };
-	var currentY;
-	var diff;
-	var tweenedValue;
-	var newY;
-	var paToServ;
-	var paToHome;
+    if (scrollTop > this.lastScrollPos){
+      this.scrollDirection = 'down';
+    } else {
+      this.scrollDirection = 'up';
+    }
 
-	this.loop = function() {
+    this.lastScrollPos = scrollTop;
 
-		this.parallax = SizeController.getSection();
+    //if false, check to see when it changes then remove the listener
+    this.sections.each(this.onVisibilityChange.bind(this));
 
-		this.lastPos = this.scrollPos;
-		currentY = this.currentY || 0;
-		diff = -currentY - this.scrollPos;
-		tweenedValue = diff / 14;
-		newY = Math.round(currentY + tweenedValue);
+  };
+
+  this.listen = function() {
+
+    //watch the scroll event, detect section changes
+    $(window).on('resize scroll load', this.handler.bind(this));
+
+  };
+
+  this.onVisibilityChange = function(index, sectionEl) {
+
+    var section = $(sectionEl);
+    var isVisible = section.data('visible') === true;
+    var detectVisible = this.detect(sectionEl) === true;
+
+    if (detectVisible){
+
+      //show
+      if (!isVisible) {
+        console.log(section);
+        this.show(section);
+      }
+
+    } else {
+
+      //hide
+      if (isVisible) {
+        this.hide(section);
+      }
+
+    }
+
+  };
+
+  this.detect = function(el) {
+
+    if (el === undefined) {
+      return;
+    }
 
 
-		// section id name if want parallax
-		if(this.parallax === 'someIdName'){
+    var rect = el.getBoundingClientRect();
 
-			paToServ = newY * -0.05;
-			TweenMax.set(this.services, {css : { backgroundPosition : '50% ' + paToServ + '%' }});
+    var offset = el.clientHeight * 0.50;
 
-		}
+    if(el === $('#intel-footer').get(0)){
+      offset = el.clientHeight * 0.3;
+    }
 
-		// another section id name if want parallax
-		if(this.parallax === 'anotherIdName'){
+    var bottom = $(window).height();
+    var top = 0;
 
-			paToHome = 0.5 + (newY * 0.08);
-			TweenMax.set(this.home, {css : { yPercent : paToHome }});
+    if(this.scrollDirection === 'down'){
+      bottom = $(window).height() + offset;
+      top = offset * -1;
+    }else {
+      top = offset * -1;
+    }
 
-		}
+    return (
+      rect.top >= top &&
+      rect.left >= 0 &&
+      rect.bottom <= bottom &&
+      rect.right <= $(window).width()
+    );
 
-		this.sectionsContainer[0].style.webkitTransform = "matrix(1, 0, 0, 1, 0, " + newY + ")";
-		this.sectionsContainer[0].style.transform = "matrix(1, 0, 0, 1, 0, " + newY + ")";
+  };
 
-		this.currentY = currentY + tweenedValue;
+  this.show = function(section) {
 
-		scroll(this.loop.bind(this));
-	};
+    var isFooter = section.is('#intel-footer');
+    var videos = section.find('video');
 
-	this.jumpTo = function (id) {
+    if (videos.length) {
 
-		this.id = id;
+      this.video.playVideo(videos.get(0));
 
-		var offset = $(this.id).offset();
+    } else {
 
-		// home id/top hero
-		if(this.id === '#home'){
-			this.parallax = 'home';
-		}
+      if (isFooter) {
+        this.animate.animateInFooter(section);
+      } else {
+        this.animate.animateIn(section);
+      }
 
-		window.scrollTo(0, offset.top);
+    }
 
-	}
+    section.data('visible', true);
 
-}
+  };
 
-exports.ScrollController = ScrollController;
+  this.hide = function(section){
+
+    var videos = section.find('video');
+
+    if (videos.length) {
+
+      this.video.stopVideo(videos.get(0));
+      section.data('visible', false);
+
+    } else {
+
+      //this.animate.animateOut(section);
+
+    }
+
+  };
+
+};

@@ -1,7 +1,7 @@
 cornerStone
 =======================
 
-A project seed using gulp with Browserify and Sass.
+A project start up using gulp with Browserify and Sass.
 
 - gulp
 - browserify
@@ -11,6 +11,7 @@ A project seed using gulp with Browserify and Sass.
 To install
 
 - run npm install
+- run bower install - TweenMax and jQuery
+
 - run "gulp" to start watching
 
-- run bower install to add bower_components folder to project ( angular, greensock, jQuery )
