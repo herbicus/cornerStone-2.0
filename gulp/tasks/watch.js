@@ -1,23 +1,19 @@
 'use strict';
 
-var gulp = require('gulp'),
-    config = require('../config.js'),
-    refresh = require('gulp-livereload');
+var gulp = require('gulp');
+var browserSync = require('browser-sync').create();
 
-gulp.task('watch', ['lint', 'serve'], function() {
+// Static server
+gulp.task('watch', ['styles', 'browserify'], function() {
 
-  // watch the scripts directory
-  gulp.watch(['scripts/*.js', 'scripts/**/*.js'],[
-    'browserify',
-    'lint'
-  ]);
+    browserSync.init({
+        server: "./www"
+    });
 
-  // watch the stylus directory
-  gulp.watch(['styles/**/*.scss'], [
-    'styles'
-  ]);
+    gulp.watch("styles/**/*.styl", ['styles']);
+    gulp.watch("scripts/**/*.{js,hbs}", ['browserify']);
 
-  //report when the server has changed
-  gulp.watch('./www/**/*').on('change', refresh.changed);
-
+    gulp.watch("www/css/*.css").on('change', browserSync.reload);
+    gulp.watch("www/*.html").on('change', browserSync.reload);
+    gulp.watch("www/js/*.js").on('change', browserSync.reload);
 });

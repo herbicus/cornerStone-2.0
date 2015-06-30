@@ -1,39 +1,38 @@
 'use strict';
 
 var gulp = require('gulp'),
-    browserify = require('gulp-browserify'),
+    source = require('vinyl-source-stream'),
+    browserify = require('browserify'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglifyjs');
 
+//process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
+
 // Browserify task
-gulp.task('browserify', function() {
+gulp.task('browserify', ['browserify-app', 'browserify-vendor']);
+
+gulp.task('browserify-app', function() {
 
   // App entry point
-  gulp.src(['scripts/app.js'])
-    .pipe(browserify({
+  return browserify('scripts/app.js', {
       insertGlobals: true,
       debug: true
-  }))
+    })
+    .bundle()
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('www/js'));
 
-  // Bundle
-  .pipe(concat('app.js'))
+});
 
-  .pipe(uglify())
+gulp.task('browserify-vendor', function() {
 
-  // Distrubute
-  .pipe(gulp.dest('www/js'));
-
-  gulp.src(['scripts/vendor.js'])
-    .pipe(browserify({
+  // Vendor entry point
+  return browserify('scripts/vendor.js', {
       insertGlobals: true,
-      debug: false
-  }))
-
-  .pipe(concat('vendor.js'))
-
-  .pipe(uglify())
-
-  // Distrubute
-  .pipe(gulp.dest('www/js'));
+      debug: true
+    })
+    .bundle()
+    .pipe(source('vendor.js'))
+    .pipe(gulp.dest('www/js'));
 
 });
